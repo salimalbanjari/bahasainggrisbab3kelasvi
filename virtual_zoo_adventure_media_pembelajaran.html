@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Zoo Adventure - Bahasa Inggris Kelas 6</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Cute Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Fredoka & Inter for Child-friendly Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for Celebration -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        fredoka: ['Fredoka', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        zooGreen: '#10b981',
+                        zooDarkGreen: '#047857',
+                        zooYellow: '#fbbf24',
+                        zooOrange: '#f97316',
+                        zooSky: '#0ea5e9'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Fredoka', 'Inter', sans-serif;
+            background-color: #f0fdf4;
+        }
+        .bouncy-hover:hover {
+            transform: translateY(-4px) scale(1.02);
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .custom-shadow {
+            box-shadow: 0 8px 0 0 #047857;
+        }
+        .custom-shadow-orange {
+            box-shadow: 0 8px 0 0 #c2410c;
+        }
+        .custom-shadow-yellow {
+            box-shadow: 0 8px 0 0 #d97706;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-800 antialiased selection:bg-amber-300">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shadow-xl border-b-8 border-emerald-800">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-amber-400 p-3 rounded-2xl text-emerald-950 text-3xl shadow-inner border-2 border-amber-200 animate-bounce">
+                    🦁
+                </div>
+                <div>
+                    <span class="bg-amber-300 text-emerald-950 text-xs px-3 py-0.5 rounded-full font-bold uppercase tracking-wide">
+                        Bahasa Inggris Kelas VI SD • Chapter 3
+                    </span>
+                    <h1 class="text-2xl md:text-3xl font-black tracking-wide text-amber-300 drop-shadow">
+                        A Trip to the Zoo 🌿
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Sound Toggle & Score Badge -->
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-800/80 backdrop-blur px-4 py-2 rounded-2xl flex items-center gap-2 border border-emerald-500/50">
+                    <span class="text-amber-400 text-xl"><i class="fa-solid font-bold fa-star"></i></span>
+                    <span class="text-sm font-bold">Stars Collected: <span id="star-count" class="text-amber-300 text-lg">0</span>/10</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="max-w-6xl mx-auto px-4 mt-2">
+            <nav class="flex flex-wrap gap-2 justify-center md:justify-start" id="nav-tabs">
+                <button onclick="switchTab('map')" id="tab-map" class="px-5 py-3 rounded-t-2xl font-bold text-sm md:text-base flex items-center gap-2 transition bg-white text-emerald-800 border-t-4 border-amber-400 shadow-md">
+                    <i class="fa-solid fa-map-location-dot"></i> Interactive Zoo Map
+                </button>
+                <button onclick="switchTab('directions')" id="tab-directions" class="px-5 py-3 rounded-t-2xl font-bold text-sm md:text-base flex items-center gap-2 transition bg-emerald-700 text-emerald-100 hover:bg-emerald-600">
+                    <i class="fa-solid fa-compass"></i> Giving Directions
+                </button>
+                <button onclick="switchTab('vocab')" id="tab-vocab" class="px-5 py-3 rounded-t-2xl font-bold text-sm md:text-base flex items-center gap-2 transition bg-emerald-700 text-emerald-100 hover:bg-emerald-600">
+                    <i class="fa-solid fa-book-open"></i> Animal Verbs & Categories
+                </button>
+                <button onclick="switchTab('quiz')" id="tab-quiz" class="px-5 py-3 rounded-t-2xl font-bold text-sm md:text-base flex items-center gap-2 transition bg-amber-400 text-emerald-950 font-black hover:bg-amber-300 border-t-4 border-amber-500">
+                    <i class="fa-solid fa-gamepad"></i> Formative Quiz (10 Soal)
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
+
+        <!-- TAB 1: INTERACTIVE ZOO MAP -->
+        <section id="section-map" class="space-y-6">
+            <div class="bg-white p-6 rounded-3xl border-4 border-emerald-200 shadow-lg">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+                    <div>
+                        <h2 class="text-2xl font-black text-emerald-800 flex items-center gap-2">
+                            <i class="fa-solid fa-map text-amber-500"></i> Explore Places in the Zoo!
+                        </h2>
+                        <p class="text-slate-600 text-sm md:text-base">
+                            Klik pada lokasi di bawah untuk mendengarkan pengucapan Bahasa Inggris dan mempelajari fungsinya!
+                        </p>
+                    </div>
+                    <span class="bg-emerald-100 text-emerald-800 font-bold px-4 py-1.5 rounded-full text-xs flex items-center gap-2">
+                        <i class="fa-solid fa-volume-high"></i> Click icon to listen Audio
+                    </span>
+                </div>
+
+                <!-- Grid Map Places -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                    <!-- Entrance Gate -->
+                    <button onclick="selectPlace('entrance')" class="bouncy-hover p-4 rounded-2xl bg-gradient-to-b from-amber-50 to-orange-50 border-3 border-amber-300 text-center shadow-md focus:ring-4 focus:ring-amber-300">
+                        <div class="text-5xl mb-2">🚪</div>
+                        <div class="font-bold text-amber-900">Entrance Gate</div>
+                        <div class="text-xs text-amber-700">Pintu Masuk</div>
+                    </button>
+                    <!-- Ticket Booth -->
+                    <button onclick="selectPlace('ticket')" class="bouncy-hover p-4 rounded-2xl bg-gradient-to-b from-sky-50 to-blue-50 border-3 border-sky-300 text-center shadow-md focus:ring-4 focus:ring-sky-300">
+                        <div class="text-5xl mb-2">🎟️</div>
+                        <div class="font-bold text-sky-900">Ticket Booth</div>
+                        <div class="text-xs text-sky-700">Loket Tiket</div>
+                    </button>
+                    <!-- Information Center -->
+                    <button onclick="selectPlace('info')" class="bouncy-hover p-4 rounded-2xl bg-gradient-to-b from-teal-50 to-emerald-50 border-3 border-teal-300 text-center shadow-md focus:ring-4 focus:ring-teal-300">
+                        <div class="text-5xl mb-2">ℹ️</div>
+                        <div class="font-bold text-teal-900">Information Center</div>
+                        <div class="text-xs text-teal-700">Pusat Informasi</div>
+                    </button>
+                    <!-- Lion Cage -->
+                    <button onclick="selectPlace('lion')" class="bouncy-hover p-4 rounded-2xl bg-gradient-to-b from-yellow-50 to-amber-50 border-3 border-yellow-400 text-center shadow-md focus:ring-4 focus:ring-yellow-400">
+                        <div class="text-5xl mb-2">🦁</div>
+                        <div class="font-bold text-amber-950">Lion Cage</div>
+                        <div class="text-xs text-amber-800">Kandang Singa</div>
+                    </button>
+                    <!-- Elephant Area -->
+                    <button onclick="selectPlace('elephant')" class="bouncy-hover p-4 rounded-2xl bg-gradient-to-b from-slate-50 to-gray-100 border-3 border-slate-300 text-center shadow-md focus:ring-4 focus:ring-slate-300">
+                        <div class="text-5xl mb-2">🐘</div>
+                        <div class="font-bold text-slate-800">Elephant Area</div>
+                        <div class="text-xs text-slate-600">Area Gajah</div>
+                    </button>
+                    <!-- Monkey Cage -->
+                    <button onclick="selectPlace('monkey')" class="bouncy-hover p-4 rounded-2xl bg-gradient-to-b from-orange-50 to-amber-100 border-3 border-orange-300 text-center shadow-md focus:ring-4 focus:ring-orange-300">
+                        <div class="text-5xl mb-2">🐒</div>
+                        <div class="font-bold text-orange-950">Monkey Cage</div>
+                        <div class="text-xs text-orange-800">Kandang Monyet</div>
+                    </button>
+                    <!-- Bird House -->
+                    <button onclick="selectPlace('bird')" class="bouncy-hover p-4 rounded-2xl bg-gradient-to-b from-emerald-50 to-green-100 border-3 border-emerald-300 text-center shadow-md focus:ring-4 focus:ring-emerald-300">
+                        <div class="text-5xl mb-2">🦜</div>
+                        <div class="font-bold text-emerald-950">Bird House</div>
+                        <div class="text-xs text-emerald-800">Rumah Burung</div>
+                    </button>
+                    <!-- Reptile House -->
+                    <button onclick="selectPlace('reptile')" class="bouncy-hover p-4 rounded-2xl bg-gradient-to-b from-lime-50 to-emerald-100 border-3 border-lime-400 text-center shadow-md focus:ring-4 focus:ring-lime-400">
+                        <div class="text-5xl mb-2">🐊</div>
+                        <div class="font-bold text-lime-950">Reptile House</div>
+                        <div class="text-xs text-lime-800">Rumah Reptil</div>
+                    </button>
+                    <!-- Toilet -->
+                    <button onclick="selectPlace('toilet')" class="bouncy-hover p-4 rounded-2xl bg-gradient-to-b from-blue-50 to-indigo-50 border-3 border-blue-300 text-center shadow-md focus:ring-4 focus:ring-blue-300">
+                        <div class="text-5xl mb-2">🚻</div>
+                        <div class="font-bold text-blue-900">Toilet</div>
+                        <div class="text-xs text-blue-700">Toilet</div>
+                    </button>
+                    <!-- Food Court -->
+                    <button onclick="selectPlace('food')" class="bouncy-hover p-4 rounded-2xl bg-gradient-to-b from-rose-50 to-pink-50 border-3 border-rose-300 text-center shadow-md focus:ring-4 focus:ring-rose-300">
+                        <div class="text-5xl mb-2">🍔</div>
+                        <div class="font-bold text-rose-950">Food Court</div>
+                        <div class="text-xs text-rose-800">Pujasera / Kantin</div>
+                    </button>
+                </div>
+
+                <!-- Info Modal / Display Box -->
+                <div id="place-detail" class="mt-6 p-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-lg border-2 border-emerald-500">
+                    <div class="flex flex-col sm:flex-row items-center gap-6">
+                        <div id="place-icon" class="text-7xl bg-white/20 p-4 rounded-3xl backdrop-blur">🚪</div>
+                        <div class="flex-grow text-center sm:text-left space-y-2">
+                            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3">
+                                <h3 id="place-name" class="text-3xl font-black text-amber-300">Entrance Gate</h3>
+                                <button onclick="speakText(document.getElementById('place-name').innerText)" class="bg-amber-400 hover:bg-amber-300 text-emerald-950 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow">
+                                    <i class="fa-solid fa-volume-high"></i> Pronounce
+                                </button>
+                            </div>
+                            <p id="place-trans" class="text-emerald-100 font-semibold">Artinya: Pintu Masuk Kebun Binatang</p>
+                            <p id="place-desc" class="text-sm bg-black/20 p-3 rounded-xl border border-white/10 text-emerald-50">
+                                This is the entrance gate where all visitors enter the zoo!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: GIVING & ASKING DIRECTIONS -->
+        <section id="section-directions" class="space-y-6 hidden">
+            <div class="bg-white p-6 rounded-3xl border-4 border-emerald-200 shadow-lg space-y-6">
+                <div>
+                    <h2 class="text-2xl font-black text-emerald-800 flex items-center gap-2">
+                        <i class="fa-solid fa-compass text-amber-500"></i> Asking & Giving Directions
+                    </h2>
+                    <p class="text-slate-600 text-sm">Pelajari bagaimana cara menanyakan dan memberikan petunjuk arah di kebun binatang!</p>
+                </div>
+
+                <!-- Directions Grid Expressions & Prepositions -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Expressions -->
+                    <div class="bg-amber-50 p-5 rounded-2xl border-2 border-amber-200 space-y-3">
+                        <h3 class="font-bold text-amber-900 text-lg flex items-center gap-2">
+                            <i class="fa-solid fa-signs-post text-amber-600"></i> Directions Expressions (Petunjuk Arah)
+                        </h3>
+                        <div class="space-y-2">
+                            <div class="bg-white p-3 rounded-xl border border-amber-200 flex justify-between items-center cursor-pointer hover:bg-amber-100" onclick="speakText('Go straight')">
+                                <span class="font-bold text-amber-950">⬆️ Go straight</span>
+                                <span class="text-xs bg-amber-200 text-amber-900 px-2 py-1 rounded-lg">Jalan Lurus</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-xl border border-amber-200 flex justify-between items-center cursor-pointer hover:bg-amber-100" onclick="speakText('Turn left')">
+                                <span class="font-bold text-amber-950">⬅️ Turn left</span>
+                                <span class="text-xs bg-amber-200 text-amber-900 px-2 py-1 rounded-lg">Belok Kiri</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-xl border border-amber-200 flex justify-between items-center cursor-pointer hover:bg-amber-100" onclick="speakText('Turn right')">
+                                <span class="font-bold text-amber-950">➡️ Turn right</span>
+                                <span class="text-xs bg-amber-200 text-amber-900 px-2 py-1 rounded-lg">Belok Kanan</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prepositions of Place -->
+                    <div class="bg-teal-50 p-5 rounded-2xl border-2 border-teal-200 space-y-3">
+                        <h3 class="font-bold text-teal-900 text-lg flex items-center gap-2">
+                            <i class="fa-solid fa-location-dot text-teal-600"></i> Prepositions of Place (Kata Depan)
+                        </h3>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div class="bg-white p-2.5 rounded-xl border border-teal-200" onclick="speakText('next to')">
+                                <span class="font-bold text-teal-950 block">next to</span>
+                                <span class="text-xs text-slate-500">di sebelah</span>
+                            </div>
+                            <div class="bg-white p-2.5 rounded-xl border border-teal-200" onclick="speakText('between')">
+                                <span class="font-bold text-teal-950 block">between</span>
+                                <span class="text-xs text-slate-500">di antara</span>
+                            </div>
+                            <div class="bg-white p-2.5 rounded-xl border border-teal-200" onclick="speakText('behind')">
+                                <span class="font-bold text-teal-950 block">behind</span>
+                                <span class="text-xs text-slate-500">di belakang</span>
+                            </div>
+                            <div class="bg-white p-2.5 rounded-xl border border-teal-200" onclick="speakText('in front of')">
+                                <span class="font-bold text-teal-950 block">in front of</span>
+                                <span class="text-xs text-slate-500">di depan</span>
+                            </div>
+                            <div class="bg-white p-2.5 rounded-xl border border-teal-200" onclick="speakText('near')">
+                                <span class="font-bold text-teal-950 block">near</span>
+                                <span class="text-xs text-slate-500">dekat</span>
+                            </div>
+                            <div class="bg-white p-2.5 rounded-xl border border-teal-200" onclick="speakText('beside')">
+                                <span class="font-bold text-teal-950 block">beside</span>
+                                <span class="text-xs text-slate-500">di samping</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Simulation / Roleplay -->
+                <div class="bg-slate-900 text-white p-6 rounded-3xl border-4 border-slate-700 shadow-xl space-y-4">
+                    <div class="flex items-center gap-2">
+                        <span class="bg-amber-400 text-slate-950 font-bold text-xs px-3 py-1 rounded-full uppercase">
+                            🎭 Mini Roleplay Simulation
+                        </span>
+                    </div>
+
+                    <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 flex items-start gap-4">
+                        <span class="text-4xl">🙋‍♂️</span>
+                        <div>
+                            <h4 class="font-bold text-amber-300">Tourist asks:</h4>
+                            <p class="text-lg font-semibold text-white" id="tourist-question">"Excuse me, where is the Lion Cage?"</p>
+                            <p class="text-xs text-slate-400 italic">"Permisi, di manakah kandang singa?"</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <p class="text-sm text-slate-300 font-bold">Pilih jawaban petunjuk arah yang benar untuk turis:</p>
+                        <div class="grid gap-2" id="direction-options">
+                            <button onclick="checkDirectionAnswer(true)" class="p-3 rounded-xl bg-slate-800 hover:bg-emerald-700 text-left border border-slate-700 font-semibold transition flex items-center gap-2">
+                                <span>🟢 "Go straight and turn right. It is next to the Entrance Gate."</span>
+                            </button>
+                            <button onclick="checkDirectionAnswer(false)" class="p-3 rounded-xl bg-slate-800 hover:bg-rose-700 text-left border border-slate-700 font-semibold transition flex items-center gap-2">
+                                <span>🔴 "Fly to the sky and swim in the river."</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="direction-feedback" class="hidden p-3 rounded-xl text-center font-bold text-sm"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: VOCABULARY & ANIMAL CATEGORIES -->
+        <section id="section-vocab" class="space-y-6 hidden">
+            <div class="bg-white p-6 rounded-3xl border-4 border-emerald-200 shadow-lg space-y-6">
+                <div>
+                    <h2 class="text-2xl font-black text-emerald-800 flex items-center gap-2">
+                        <i class="fa-solid fa-paw text-amber-500"></i> Action Verbs & Animal Groups
+                    </h2>
+                    <p class="text-slate-600 text-sm">Kosakata kata kerja dan klasifikasi hewan berdasarkan jenis makanannya!</p>
+                </div>
+
+                <!-- Animal Groups Summary -->
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="bg-emerald-50 p-4 rounded-2xl border-2 border-emerald-300 text-center space-y-2">
+                        <div class="text-4xl">🐘</div>
+                        <h3 class="font-black text-emerald-900 text-lg">Herbivores</h3>
+                        <p class="text-xs text-emerald-700 font-bold">Pemakan Tumbuhan (Eat Plants)</p>
+                        <p class="text-xs bg-white p-2 rounded-xl text-slate-600 border border-emerald-200">
+                            Examples: Elephants, Giraffes, Rabbits.
+                        </p>
+                    </div>
+                    <div class="bg-rose-50 p-4 rounded-2xl border-2 border-rose-300 text-center space-y-2">
+                        <div class="text-4xl">🦁</div>
+                        <h3 class="font-black text-rose-900 text-lg">Carnivores</h3>
+                        <p class="text-xs text-rose-700 font-bold">Pemakan Daging (Eat Meat)</p>
+                        <p class="text-xs bg-white p-2 rounded-xl text-slate-600 border border-rose-200">
+                            Examples: Lions, Tigers, Crocodiles.
+                        </p>
+                    </div>
+                    <div class="bg-amber-50 p-4 rounded-2xl border-2 border-amber-300 text-center space-y-2">
+                        <div class="text-4xl">🐒</div>
+                        <h3 class="font-black text-amber-900 text-lg">Omnivores</h3>
+                        <p class="text-xs text-amber-700 font-bold">Pemakan Segala (Eat Plants & Meat)</p>
+                        <p class="text-xs bg-white p-2 rounded-xl text-slate-600 border border-amber-200">
+                            Examples: Monkeys, Bears.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Verbs Grid -->
+                <div class="space-y-3">
+                    <h3 class="font-bold text-slate-800 text-lg">Rangkuman Action Verbs (Kata Kerja):</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div onclick="speakText('eat')" class="p-3 rounded-2xl bg-slate-50 border border-slate-200 hover:bg-amber-100 cursor-pointer text-center">
+                            <span class="text-3xl">🍽️</span>
+                            <div class="font-bold text-slate-800">eat</div>
+                            <div class="text-xs text-slate-500">makan</div>
+                        </div>
+                        <div onclick="speakText('live')" class="p-3 rounded-2xl bg-slate-50 border border-slate-200 hover:bg-amber-100 cursor-pointer text-center">
+                            <span class="text-3xl">🏡</span>
+                            <div class="font-bold text-slate-800">live</div>
+                            <div class="text-xs text-slate-500">tinggal</div>
+                        </div>
+                        <div onclick="speakText('climb')" class="p-3 rounded-2xl bg-slate-50 border border-slate-200 hover:bg-amber-100 cursor-pointer text-center">
+                            <span class="text-3xl">🧗</span>
+                            <div class="font-bold text-slate-800">climb</div>
+                            <div class="text-xs text-slate-500">memanjat</div>
+                        </div>
+                        <div onclick="speakText('fly')" class="p-3 rounded-2xl bg-slate-50 border border-slate-200 hover:bg-amber-100 cursor-pointer text-center">
+                            <span class="text-3xl">🕊️</span>
+                            <div class="font-bold text-slate-800">fly</div>
+                            <div class="text-xs text-slate-500">terbang</div>
+                        </div>
+                        <div onclick="speakText('swim')" class="p-3 rounded-2xl bg-slate-50 border border-slate-200 hover:bg-amber-100 cursor-pointer text-center">
+                            <span class="text-3xl">🏊</span>
+                            <div class="font-bold text-slate-800">swim</div>
+                            <div class="text-xs text-slate-500">berenang</div>
+                        </div>
+                        <div onclick="speakText('walk')" class="p-3 rounded-2xl bg-slate-50 border border-slate-200 hover:bg-amber-100 cursor-pointer text-center">
+                            <span class="text-3xl">🚶</span>
+                            <div class="font-bold text-slate-800">walk</div>
+                            <div class="text-xs text-slate-500">berjalan</div>
+                        </div>
+                        <div onclick="speakText('run')" class="p-3 rounded-2xl bg-slate-50 border border-slate-200 hover:bg-amber-100 cursor-pointer text-center">
+                            <span class="text-3xl">🏃</span>
+                            <div class="font-bold text-slate-800">run</div>
+                            <div class="text-xs text-slate-500">berlari</div>
+                        </div>
+                        <div onclick="speakText('feed')" class="p-3 rounded-2xl bg-slate-50 border border-slate-200 hover:bg-amber-100 cursor-pointer text-center">
+                            <span class="text-3xl">🥩</span>
+                            <div class="font-bold text-slate-800">feed</div>
+                            <div class="text-xs text-slate-500">memberi makan</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- REMEMBER BANNER -->
+                <div class="bg-gradient-to-r from-amber-400 to-orange-400 text-emerald-950 p-5 rounded-2xl shadow-md flex items-center gap-4 border-2 border-amber-300">
+                    <span class="text-5xl">🐼</span>
+                    <div>
+                        <h4 class="font-black text-xl">REMEMBER! ❤️</h4>
+                        <p class="font-bold">"Animals are our friends. We must love and protect them."</p>
+                        <p class="text-xs font-semibold opacity-90">(Hewan adalah teman kita. Kita harus menyayangi dan melindungi mereka.)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: FORMATIVE QUIZ (10 QUESTIONS) -->
+        <section id="section-quiz" class="space-y-6 hidden">
+            <div class="bg-white p-6 rounded-3xl border-4 border-amber-300 shadow-xl space-y-6">
+                <!-- Quiz Header -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b-2 border-slate-100">
+                    <div>
+                        <span class="bg-amber-100 text-amber-900 text-xs px-3 py-1 rounded-full font-bold uppercase">Evaluasi Formatif</span>
+                        <h2 class="text-2xl font-black text-emerald-800 mt-1">
+                            🎯 Formative Assessment Quiz
+                        </h2>
+                    </div>
+                    <div class="bg-amber-50 px-4 py-2 rounded-2xl border border-amber-200">
+                        <span class="text-xs text-amber-800 font-bold block">Progress Soal:</span>
+                        <span id="quiz-progress-text" class="text-lg font-black text-amber-900">Soal 1 dari 10</span>
+                    </div>
+                </div>
+
+                <!-- Quiz Card Container -->
+                <div id="quiz-container" class="space-y-6">
+                    <div class="bg-emerald-50 p-6 rounded-2xl border-2 border-emerald-200 space-y-3">
+                        <span id="q-category" class="bg-emerald-200 text-emerald-900 text-xs px-3 py-1 rounded-full font-bold">Category</span>
+                        <h3 id="q-text" class="text-lg md:text-xl font-bold text-slate-800">
+                            Loading question...
+                        </h3>
+                    </div>
+
+                    <!-- Options Grid -->
+                    <div id="q-options" class="grid gap-3">
+                        <!-- Options generated dynamically via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Quiz Complete Result Screen (Hidden by default) -->
+                <div id="quiz-result" class="hidden text-center py-8 space-y-6">
+                    <div class="text-7xl animate-bounce">🏆</div>
+                    <div class="space-y-2">
+                        <h3 class="text-3xl font-black text-emerald-800">Selamat! Kamu Menyelesaikan Evaluasi!</h3>
+                        <p class="text-slate-600">Berikut adalah hasil pencapaian belajar kamu:</p>
+                    </div>
+
+                    <div class="max-w-md mx-auto bg-amber-50 p-6 rounded-3xl border-4 border-amber-300 space-y-3">
+                        <div class="text-5xl font-black text-amber-600" id="final-score">100</div>
+                        <p class="text-sm font-bold text-amber-900" id="final-eval-text">Luar biasa! Pemahamanmu sangat mendalam!</p>
+                    </div>
+
+                    <button onclick="restartQuiz()" class="px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-2xl text-lg shadow-lg border-b-4 border-emerald-800 transition">
+                        🔄 Ulangi Kuis Formatif
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-emerald-900 text-emerald-200 py-6 text-center text-xs mt-8 border-t-4 border-emerald-950">
+        <div class="max-w-6xl mx-auto px-4 space-y-2">
+            <p class="font-bold text-sm text-amber-300">🌿 Media Pembelajaran Interaktif Bahasa Inggris - Chapter 3: A Trip to the Zoo</p>
+            <p>Dirancang untuk Pembelajaran Mendalam, Bermakna, & Menyenangkan (Deep, Meaningful & Joyful Learning)</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // DATA: Places Details
+        const placesData = {
+            entrance: {
+                name: "Entrance Gate",
+                trans: "Pintu Masuk",
+                desc: "This is where visitors enter the zoo. Always check your ticket before coming in!",
+                icon: "🚪"
+            },
+            ticket: {
+                name: "Ticket Booth",
+                trans: "Loket Tiket",
+                desc: "Visitors buy entry tickets here before exploring the animals.",
+                icon: "🎟️"
+            },
+            info: {
+                name: "Information Center",
+                trans: "Pusat Informasi",
+                desc: "You can ask for zoo maps and help at the Information Center.",
+                icon: "ℹ️"
+            },
+            lion: {
+                name: "Lion Cage",
+                trans: "Kandang Singa",
+                desc: "Lions are carnivores. They eat meat and live in cages or savannah enclosures.",
+                icon: "🦁"
+            },
+            elephant: {
+                name: "Elephant Area",
+                trans: "Area Gajah",
+                desc: "Elephants are large herbivores. They eat grass and leaves using their long trunk.",
+                icon: "🐘"
+            },
+            monkey: {
+                name: "Monkey Cage",
+                trans: "Kandang Monyet",
+                desc: "Monkeys are active omnivores. They love to climb trees and eat fruits.",
+                icon: "🐒"
+            },
+            bird: {
+                name: "Bird House",
+                trans: "Rumah Burung",
+                desc: "Beautiful birds with colorful feathers live here. Birds can fly high!",
+                icon: "🦜"
+            },
+            reptile: {
+                name: "Reptile House",
+                trans: "Rumah Reptil",
+                desc: "Snakes and crocodiles live in the Reptile House. Crocodiles live near rivers.",
+                icon: "🐊"
+            },
+            toilet: {
+                name: "Toilet",
+                trans: "Toilet / Kamar Mandi",
+                desc: "A clean facility for visitors to wash hands and use restrooms.",
+                icon: "🚻"
+            },
+            food: {
+                name: "Food Court",
+                trans: "Pujasera / Kantin",
+                desc: "Visitors can take a break, buy snacks, drinks, and meals here.",
+                icon: "🍔"
+            }
+        };
+
+        // DATA: 10 Formative Quiz Questions
+        const quizQuestions = [
+            {
+                category: "Definition",
+                question: "1. What is the definition of a zoo (kebun binatang)?",
+                options: [
+                    "A place where many animals live and are cared for.",
+                    "A place to buy fruits and vegetables.",
+                    "A building where students study math.",
+                    "A station for trains and buses."
+                ],
+                answer: 0
+            },
+            {
+                category: "Places in the Zoo",
+                question: "2. Where do visitors go to buy entry tickets at the zoo?",
+                options: [
+                    "Toilet",
+                    "Ticket Booth",
+                    "Bird House",
+                    "Food Court"
+                ],
+                answer: 1
+            },
+            {
+                category: "Giving Directions",
+                question: "3. Complete the direction sentence: '______ straight to go to the monkey cage.'",
+                options: [
+                    "Turn",
+                    "Fly",
+                    "Go",
+                    "Climb"
+                ],
+                answer: 2
+            },
+            {
+                category: "Prepositions of Place",
+                question: "4. What is the Indonesian meaning of 'behind'?",
+                options: [
+                    "Di depan",
+                    "Di belakang",
+                    "Di antara",
+                    "Di sebelah"
+                ],
+                answer: 1
+            },
+            {
+                category: "Animal Groups",
+                question: "5. Elephants eat grass and leaves. Elephants are classified as ______.",
+                options: [
+                    "Carnivores",
+                    "Herbivores",
+                    "Omnivores",
+                    "Insectivores"
+                ],
+                answer: 1
+            },
+            {
+                category: "Action Verbs",
+                question: "6. Complete the animal fact: 'Monkeys like to ______ trees.'",
+                options: [
+                    "climb",
+                    "swim",
+                    "fly",
+                    "read"
+                ],
+                answer: 0
+            },
+            {
+                category: "Vocabulary",
+                question: "7. What is the English term for 'penjaga hewan'?",
+                options: [
+                    "Visitor",
+                    "Cage",
+                    "Keeper",
+                    "Ticket"
+                ],
+                answer: 2
+            },
+            {
+                category: "Asking Directions",
+                question: "8. Which expression is correct for asking directions?",
+                options: [
+                    "Where is the lion cage?",
+                    "I am eating grass.",
+                    "The zoo is closed.",
+                    "Lions eat meat."
+                ],
+                answer: 0
+            },
+            {
+                category: "Animal Fact Tense",
+                question: "9. Lions eat meat. Lions are ______.",
+                options: [
+                    "Herbivores",
+                    "Omnivores",
+                    "Carnivores",
+                    "Plants"
+                ],
+                answer: 2
+            },
+            {
+                category: "Moral Message",
+                question: "10. What must we do to animals as stated in the REMEMBER lesson?",
+                options: [
+                    "We must scare them.",
+                    "We must love and protect them.",
+                    "We must lock them forever.",
+                    "We must ignore them."
+                ],
+                answer: 1
+            }
+        ];
+
+        // App States
+        let currentQuizIndex = 0;
+        let score = 0;
+
+        // Speech Synthesis Function (Audio Text-to-Speech)
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Tab Switching Logic
+        function switchTab(tabName) {
+            const tabs = ['map', 'directions', 'vocab', 'quiz'];
+            tabs.forEach(t => {
+                const sec = document.getElementById(`section-${t}`);
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === tabName) {
+                    sec.classList.remove('hidden');
+                    btn.className = "px-5 py-3 rounded-t-2xl font-bold text-sm md:text-base flex items-center gap-2 transition bg-white text-emerald-800 border-t-4 border-amber-400 shadow-md";
+                } else {
+                    sec.classList.add('hidden');
+                    btn.className = "px-5 py-3 rounded-t-2xl font-bold text-sm md:text-base flex items-center gap-2 transition bg-emerald-700 text-emerald-100 hover:bg-emerald-600";
+                }
+            });
+
+            if(tabName === 'quiz') {
+                renderQuestion();
+            }
+        }
+
+        // Place Selection Logic
+        function selectPlace(key) {
+            const data = placesData[key];
+            if(!data) return;
+
+            document.getElementById('place-icon').innerText = data.icon;
+            document.getElementById('place-name').innerText = data.name;
+            document.getElementById('place-trans').innerText = "Artinya: " + data.trans;
+            document.getElementById('place-desc').innerText = data.desc;
+
+            // Audio output
+            speakText(data.name);
+        }
+
+        // Roleplay simulator check
+        function checkDirectionAnswer(isCorrect) {
+            const feedback = document.getElementById('direction-feedback');
+            feedback.classList.remove('hidden');
+            if(isCorrect) {
+                feedback.className = "p-3 rounded-xl text-center font-bold text-sm bg-emerald-500 text-white animate-bounce";
+                feedback.innerText = "🎉 Great job! Petunjuk arahmu sangat tepat!";
+                speakText("Great job!");
+            } else {
+                feedback.className = "p-3 rounded-xl text-center font-bold text-sm bg-rose-500 text-white";
+                feedback.innerText = "❌ Ups! Petunjuk arah kurang tepat. Coba lagi ya!";
+            }
+        }
+
+        // Quiz Renderer
+        function renderQuestion() {
+            if(currentQuizIndex >= quizQuestions.length) {
+                showQuizResult();
+                return;
+            }
+
+            const q = quizQuestions[currentQuizIndex];
+            document.getElementById('quiz-progress-text').innerText = `Soal ${currentQuizIndex + 1} dari ${quizQuestions.length}`;
+            document.getElementById('q-category').innerText = q.category;
+            document.getElementById('q-text').innerText = q.question;
+
+            const optionsContainer = document.getElementById('q-options');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-xl border-2 border-slate-200 hover:border-emerald-500 hover:bg-emerald-50 font-semibold text-slate-700 transition flex items-center justify-between group";
+                btn.innerHTML = `
+                    <span>${opt}</span>
+                    <i class="fa-solid fa-circle-chevron-right text-slate-300 group-hover:text-emerald-500 text-lg"></i>
+                `;
+                btn.onclick = () => answerQuestion(idx);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function answerQuestion(selectedIdx) {
+            const q = quizQuestions[currentQuizIndex];
+            if(selectedIdx === q.answer) {
+                score += 10;
+                document.getElementById('star-count').innerText = score / 10;
+                confetti({ particleCount: 40, spread: 60, origin: { y: 0.8 } });
+            }
+
+            currentQuizIndex++;
+            renderQuestion();
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            const resContainer = document.getElementById('quiz-result');
+            resContainer.classList.remove('hidden');
+
+            document.getElementById('final-score').innerText = score;
+            const evalText = document.getElementById('final-eval-text');
+            if(score >= 80) {
+                evalText.innerText = "🌟 Outstanding! Kamu menguasai Bab ini dengan sangat baik!";
+                confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+            } else if(score >= 60) {
+                evalText.innerText = "👍 Bagus! Kamu sudah memahami sebagian besar materi kebun binatang!";
+            } else {
+                evalText.innerText = "💪 Tetap semangat! Mari pelajari ulang peta dan kosakata kebun binatang!";
+            }
+        }
+
+        function restartQuiz() {
+            currentQuizIndex = 0;
+            score = 0;
+            document.getElementById('star-count').innerText = 0;
+            document.getElementById('quiz-container').classList.remove('hidden');
+            document.getElementById('quiz-result').classList.add('hidden');
+            renderQuestion();
+        }
+    </script>
+</body>
+</html>
